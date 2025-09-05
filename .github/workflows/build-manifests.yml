@@ -1,0 +1,51 @@
+name: Build photo manifests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'public/students/**'   # rerun when photos change
+      - 'scripts/build-manifests.mjs'
+
+permissions:
+  contents: write
+
+jobs:
+  build-manifests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile=false
+
+      - name: Build manifests
+        run: pnpm run manifest:build
+
+      - name: Commit & push if changed
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add -A
+            git commit -m "chore(manifests): rebuild photo manifests"
+            git push
+          else
+            echo "No changes to commit."
+          fi
