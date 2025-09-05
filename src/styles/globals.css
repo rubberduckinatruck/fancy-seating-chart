@@ -1,0 +1,55 @@
+/* Tailwind base */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Print helpers */
+@media print {
+  @page { size: letter landscape; margin: 0.5in; }
+  body * { visibility: hidden !important; }
+  #chartCapture, #chartCapture * { visibility: visible !important; }
+  header, .no-print, .print-hide, .seating-side-panel { display: none !important; }
+  #chartCapture {
+    position: absolute; left: 0; top: 0; width: 100% !important; max-width: 100% !important;
+    box-shadow: none !important; border: none !important;
+  }
+  html, body { background: #ffffff !important; }
+}
+
+/* Global vars */
+:root {
+  --header-h: 56px;
+  --sidepanel-right: 16px;
+  --sidepanel-bottom: 16px;
+  --sidepanel-w: 320px;
+  --sidepanel-maxw: 420px;
+  --sidepanel-radius: 14px;
+  --sidepanel-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+  --sidepanel-border: 1px solid rgba(0, 0, 0, 0.08);
+  --sidepanel-bg: #fff;
+  --sidepanel-z: 50;
+}
+
+.seating-toolbar { position: sticky; top: 0; z-index: 20; background: #fff; border-bottom: 1px solid rgba(0,0,0,0.08); }
+.seating-side-panel {
+  position: fixed; right: var(--sidepanel-right); bottom: var(--sidepanel-bottom);
+  top: calc(var(--header-h) + 0.75rem); width: var(--sidepanel-w);
+  max-width: min(var(--sidepanel-maxw), 95vw); overflow: auto;
+  background: var(--sidepanel-bg); border: var(--sidepanel-border);
+  border-radius: var(--sidepanel-radius); box-shadow: var(--sidepanel-shadow);
+  z-index: var(--sidepanel-z);
+}
+.seating-side-panel__body { padding-bottom: 1rem; }
+.app-with-fixed-panel { padding-right: calc(var(--sidepanel-w) + var(--sidepanel-right) + 16px); }
+@media (max-width: 720px) { .app-with-fixed-panel { padding-right: 0; } }
+
+/* Fixtures (freeform) */
+.fixture { position: absolute; user-select: none; border-radius: 8px; border: 1px solid rgba(0,0,0,.15); background: rgba(0,0,0,.06); display: flex; align-items: center; justify-content: center; font-size: 12px; padding: 2px 6px; color: #111827; }
+.fixture--window { background: rgba(59,130,246,.12); border-color: rgba(59,130,246,.35); }
+.fixture--door   { background: rgba(16,185,129,.12); border-color: rgba(16,185,129,.35); }
+.fixture--desk   { background: rgba(234,179,8,.14);  border-color: rgba(234,179,8,.4); }
+
+/* Desk cards */
+.desk { width: 96px; min-height: 84px; border-radius: 12px; border: 1px solid rgba(0,0,0,.15); background: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; padding: 8px; }
+.desk--mismatch { outline: 2px solid #ef4444; }
+.btn { @apply px-3 py-2 rounded-xl border bg-white; }
